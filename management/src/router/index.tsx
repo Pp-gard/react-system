@@ -3,7 +3,9 @@ import React, { lazy } from 'react'
 import Home from "@/views/Home";
 import {Navigate} from 'react-router-dom' 
 // const Home = lazy(() => import('../views/Home'))
-const About = lazy(() => import('../views/About'))
+// const About = lazy(() => import('../views/About'))
+const Page1 = lazy(() => import('@/views/page1'))
+const Page2 = lazy(() => import('@/views/page2'))
 // 懒加载模式的组件添加loading
 const widthLoadingComponent = (comp: JSX.Element) => {
   return (
@@ -16,15 +18,21 @@ const widthLoadingComponent = (comp: JSX.Element) => {
 const routes = [
   {
     path: '/',
-    element: <Navigate to='/home'></Navigate>
+    element: <Navigate to='/page1'></Navigate>
   },
   {
-    path: '/home',
-    element: <Home/>
-  },
-  {
-    path: '/about',
-    element: widthLoadingComponent(<About/>)
+    path: '/',
+    element: <Home/>,
+    children: [
+      {
+        path: '/page1',
+        element: widthLoadingComponent(<Page1/>)
+      },
+      {
+        path: '/page2',
+        element: widthLoadingComponent(<Page2/>)
+      },
+    ]
   }
 ]
 

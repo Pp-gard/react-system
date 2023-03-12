@@ -8,6 +8,7 @@ import {
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu } from 'antd';
 import React, { useState } from 'react';
+import {Outlet, useNavigate } from 'react-router-dom'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -28,8 +29,8 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
+  getItem('Option 1', '/page1', <PieChartOutlined />),
+  getItem('Option 2', '/page2', <DesktopOutlined />),
   getItem('User', 'sub1', <UserOutlined />, [
     getItem('Tom', '3'),
     getItem('Bill', '4'),
@@ -41,25 +42,30 @@ const items: MenuItem[] = [
 
 const Home: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-
+  const natigateTo = useNavigate()
+  let menuClick = (e: {key: string}) => {
+    natigateTo(e.key)
+  }
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu theme="dark" defaultSelectedKeys={['/page1']} mode="inline" items={items} onClick={ menuClick } />
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }} />
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
+        <Header className="site-layout-background" style={{ padding: 0 }} >
+          <Breadcrumb style={{ lineHeight: '64px', paddingLeft: '10px'}}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
           </Breadcrumb>
-          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+        </Header>
+        <Content style={{ margin: '16px 16px 0'}} className="site-layout-background">
+          {/* <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
             Bill is a cat.
-          </div>
+          </div> */}
+          <Outlet />
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        <Footer style={{ textAlign: 'center', padding: 0, lineHeight: '48px' }}>Ant Design ©2018 Created by Ant UED</Footer>
       </Layout>
     </Layout>
   );
